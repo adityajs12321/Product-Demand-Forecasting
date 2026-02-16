@@ -2,6 +2,8 @@ from itertools import product
 from fastapi import FastAPI, UploadFile, File
 import sys
 import os
+import pandas as pd
+from utilsforecast.plotting import plot_series
 
 from pydantic import BaseModel
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
@@ -44,8 +46,8 @@ def input_data(file: UploadFile = File(...)):
         # Pass the temporary file path to read_data
         global data
         data = model.read_data("tempfile.xlsx")
-        processed_data = model.pre_process_data(data)
-        return {"message": "Data processed successfully", "rows": len(processed_data)}
+        data = model.pre_process_data(data)  # Store processed data back to global variable
+        return {"message": "Data processed successfully", "rows": len(data)}
     finally:
         print("Cleaning up temporary file...")
 
@@ -56,4 +58,4 @@ def filter_data(request: ProductRequest):
         return {"message": "No data to process"}
     
     processed_data = model.filtered_data(data, request.product)
-    return {"message": "Data pre-processed successfully", "rows": len(processed_data)}
+    # return {"message": "Data pre-processed successfully", "rows": len(processed_data)}
