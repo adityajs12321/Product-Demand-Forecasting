@@ -3,7 +3,6 @@ from fastapi import FastAPI, UploadFile, File
 import sys
 import os
 import pandas as pd
-from utilsforecast.plotting import plot_series
 
 from pydantic import BaseModel
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
@@ -13,7 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-data = None
+data, processed_data = None, None
 
 origins = [
     "http://localhost:3000"
@@ -57,5 +56,61 @@ def filter_data(request: ProductRequest):
     if data is None:
         return {"message": "No data to process"}
     
+    global processed_data
     processed_data = model.filtered_data(data, request.product)
-    # return {"message": "Data pre-processed successfully", "rows": len(processed_data)}
+    # sales = processed_data[processed_data["unique_id"] == request.product]["y"]
+    # timerange = processed_data[processed_data["unique_id"] == request.product]["ds"]
+
+    processed_data = processed_data.set_index("ds").resample("D")["y"].sum().replace(0, None).ffill()
+    X = pd.DataFrame()
+    desc_df = pd.DataFrame([request.product]*processed_data.shape[0], columns=["unique_id"])
+    test_data = pd.concat([desc_df, processed_data.reset_index()], axis=1)
+    X = pd.concat([X, test_data], ignore_index=True)
+
+    # sales = X["y"]
+    # timerange = X["ds"]
+    processed_data = X
+
+    timerange, sales = model.tbats_forecast(X, horizon=21)
+
+    return {"sales": sales.tolist(), "timerange": timerange.astype(str).tolist()}
+
+@app.post("/tftpredict")
+def tftpredict(request: ProductRequest):
+    global data
+    if data is None:
+        return {"message": "No data to process"}
+    
+    global processed_data
+    processed_data = model.filtered_data(data, request.product)
+    # sales = processed_data[processed_data["unique_id"] == request.product]["y"]
+    # timerange = processed_data[processed_data["unique_id"] == request.product]["ds"]
+
+    processed_data = processed_data.set_index("ds").resample("D")["y"].sum().replace(0, None).ffill()
+    X = pd.DataFrame()
+    desc_df = pd.DataFrame([request.product]*processed_data.shape[0], columns=["unique_id"])
+    test_data = pd.concat([desc_df, processed_data.reset_index()], axis=1)
+    X = pd.concat([X, test_data], ignore_index=True)
+
+    # sales = X["y"]
+    # timerange = X["ds"]
+    processed_data = X
+
+    timerange, sales = model.tft_forecast(X, horizon=21)
+
+    return {"sales": sales.tolist(), "timerange": timerange.astype(str).tolist()}
+
+
+
+# @app.post("/predict")
+# def predict():
+#     global processed_data
+#     if processed_data is None:
+#         return {"message": "No data to predict"}
+    
+#     # Here you would call your prediction function and return the results
+#     # For example:
+#     # predictions = model.predict(processed_data)
+#     # return {"predictions": predictions.tolist()}
+    
+#     return {"message": "Prediction endpoint not implemented yet"}

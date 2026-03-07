@@ -1,8 +1,30 @@
-import React, {useState} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import './App.css';
 import InputFile from './components/InputFile';
 import api from './api';
 import InputField from './components/InputField';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  LineController,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  LineController,
+  Title,
+  Tooltip,
+  Legend
+);
 
 function App() {
   const [file, setFile] = useState<File | null>(null);
@@ -12,6 +34,64 @@ function App() {
   const [product, setProduct] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [chartData, setChartData] = useState<any>(null);
+  const [showChart, setShowChart] = useState(false);
+  const chartRef = useRef<HTMLCanvasElement>(null);
+  const chartInstance = useRef<ChartJS | null>(null);
+  
+  // Create chart when chartData changes
+  useEffect(() => {
+    if (chartData && chartRef.current) {
+      // Destroy existing chart if it exists
+      if (chartInstance.current) {
+        chartInstance.current.destroy();
+      }
+      
+      const ctx = chartRef.current.getContext('2d');
+      if (ctx) {
+        chartInstance.current = new ChartJS(ctx, {
+          type: 'line',
+          data: chartData,
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'top' as const,
+              },
+              title: {
+                display: true,
+                text: `Demand Forecast for ${product}`,
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                title: {
+                  display: true,
+                  text: 'Demand (Units)'
+                }
+              },
+              x: {
+                
+                title: {
+                  display: true,
+                  text: 'Time Period'
+                }
+              }
+            }
+          }
+        });
+      }
+    }
+    
+    // Cleanup on unmount
+    return () => {
+      if (chartInstance.current) {
+        chartInstance.current.destroy();
+      }
+    };
+  }, [chartData, product]);
   
   // function to handle file upload to the backend (fastapi with UploadFile class) and axios
   async function handleFileUpload(file: File) {
@@ -60,8 +140,36 @@ function App() {
 
     try {
       const response = await api.post('/process', {product: product});
-      console.log('Process successful:', response.data);
+      // console.log('Process successful:', response.data);
       setSuccess('Prediction completed successfully!');
+      
+      // Generate sample forecast data for demonstration
+      const monthLabels = response.data.timerange.map((date: string) => {
+        const d = new Date(date);
+        return `${d.getDate()}/${d.getMonth()+1}`;
+      });
+
+      // console.log('Month Labels:', monthLabels);
+      // console.log('Sales Data:', response.data.sales);
+      
+      // Sample historical and predicted data - replace with actual API response
+      const sales = response.data.sales;
+      
+      const data = {
+        labels: monthLabels,
+        datasets: [
+          {
+            label: 'Historical Demand',
+            data: sales,
+            borderColor: 'rgb(75, 192, 192)',
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            tension: 0.1
+          },
+        ]
+      };
+      
+      setChartData(data);
+      setShowChart(true);
     }
     catch (error) {
       console.error('Error processing file:', error);
@@ -74,9 +182,13 @@ function App() {
   const resetApp = () => {
     setFile(null);
     setUploaded(false);
+    setUploading(false);
+    setProcessing(false);
     setProduct("");
     setError(null);
     setSuccess(null);
+    setChartData(null);
+    setShowChart(false);
   }
 
   return (
@@ -108,12 +220,22 @@ function App() {
         {uploaded && (
           <div className="predict-section">
             <h2>Step 2: Enter Product Details</h2>
+            <p className="form-label">Product Name</p>
             <InputField 
               product={product} 
               setProduct={setProduct} 
               handleFileProcess={handleFileProcess}
               processing={processing}
             />
+          </div>
+        )}
+        
+        {showChart && chartData && (
+          <div className="chart-section">
+            <h2>Step 3: Demand Forecast Results</h2>
+            <div className="chart-container">
+              <canvas ref={chartRef}></canvas>
+            </div>
           </div>
         )}
         

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import "./styles.css"
 
 interface Props {
@@ -10,6 +10,13 @@ interface Props {
 
 function InputFile({ file, setFile, handleFileUpload, uploading }: Props) {
     const fileInputRef = useRef<HTMLInputElement>(null);
+
+    // Reset file input when file is set to null (after "Start Over")
+    useEffect(() => {
+        if (file === null && fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
+    }, [file]);
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = e.target.files?.[0];
@@ -24,10 +31,10 @@ function InputFile({ file, setFile, handleFileUpload, uploading }: Props) {
             }
             
             // Validate file size (max 10MB)
-            if (selectedFile.size > 10 * 1024 * 1024) {
-                alert('File size must be less than 10MB');
-                return;
-            }
+            // if (selectedFile.size > 10 * 1024 * 1024) {
+            //     alert('File size must be less than 10MB');
+            //     return;
+            // }
             
             await handleFileUpload(selectedFile);
         }

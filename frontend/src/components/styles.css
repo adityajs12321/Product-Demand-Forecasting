@@ -73,14 +73,6 @@
     margin-bottom: 1.5rem;
 }
 
-.form-label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-    color: #374151;
-    font-size: 0.95rem;
-}
-
 .input-field {
     width: 100%;
     padding: 1rem;

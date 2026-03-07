@@ -12,9 +12,6 @@ function InputField({ product, setProduct, handleFileProcess, processing }: Prop
     return (
         <form className="prediction-form" onSubmit={handleFileProcess}>
             <div className="form-group">
-                <label htmlFor="product-input" className="form-label">
-                    Product Name
-                </label>
                 <input 
                     id="product-input"
                     type="text" 
