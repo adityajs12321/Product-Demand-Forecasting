@@ -1,14 +1,44 @@
+:root {
+  --drop-zone-bg: #f8fafc;
+  --drop-zone-border: #cbd5e0;
+  --drop-zone-hover-bg: #f0f4ff;
+  --drop-zone-hover-border: #667eea;
+  --drop-text: #374151;
+  --file-types: #6b7280;
+  
+  --input-bg: #f9fafb;
+  --input-border: #e5e7eb;
+  --input-focus-bg: white;
+  --input-disabled-bg: #f3f4f6;
+  --input-text: #333;
+}
+
+body.dark-mode {
+  --drop-zone-bg: #1e1e2f;
+  --drop-zone-border: #33334d;
+  --drop-zone-hover-bg: #2a2a40;
+  --drop-zone-hover-border: #8c9eff;
+  --drop-text: #d0d0d0;
+  --file-types: #a0a0a0;
+  
+  --input-bg: #1e1e2f;
+  --input-border: #33334d;
+  --input-focus-bg: #2a2a40;
+  --input-disabled-bg: #2a2a30;
+  --input-text: #f0f0f0;
+}
+
 /* File Upload Styles */
 .file-upload-container {
     width: 100%;
 }
 
 .drop-zone {
-    border: 2px dashed #cbd5e0;
+    border: 2px dashed var(--drop-zone-border);
     border-radius: 12px;
     padding: 3rem 2rem;
     text-align: center;
-    background: #f8fafc;
+    background: var(--drop-zone-bg);
     cursor: pointer;
     transition: all 0.3s ease;
     position: relative;
@@ -16,14 +46,14 @@
 }
 
 .drop-zone:hover {
-    border-color: #667eea;
-    background: #f0f4ff;
+    border-color: var(--drop-zone-hover-border);
+    background: var(--drop-zone-hover-bg);
     transform: translateY(-2px);
 }
 
 .drop-zone.uploading {
-    border-color: #667eea;
-    background: #f0f4ff;
+    border-color: var(--drop-zone-hover-border);
+    background: var(--drop-zone-hover-bg);
     cursor: not-allowed;
 }
 
@@ -40,12 +70,12 @@
 .drop-text {
     font-size: 1.1rem;
     margin-bottom: 0.5rem;
-    color: #374151;
+    color: var(--drop-text);
 }
 
 .file-types {
     font-size: 0.85rem;
-    color: #6b7280;
+    color: var(--file-types);
     margin-top: 0.5rem;
 }
 
@@ -77,8 +107,9 @@
     width: 100%;
     padding: 1rem;
     font-size: 1rem;
-    background-color: #f9fafb;
-    border: 2px solid #e5e7eb;
+    color: var(--input-text);
+    background-color: var(--input-bg);
+    border: 2px solid var(--input-border);
     border-radius: 8px;
     transition: all 0.2s ease;
     outline: none;
@@ -86,12 +117,12 @@
 
 .input-field:focus {
     border-color: #667eea;
-    background-color: white;
+    background-color: var(--input-focus-bg);
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .input-field:disabled {
-    background-color: #f3f4f6;
+    background-color: var(--input-disabled-bg);
     cursor: not-allowed;
     opacity: 0.6;
 }

@@ -1,0 +1,30 @@
+/* For components/styles.css */
+:root {
+  --drop-zone-bg: #f8fafc;
+  --drop-zone-border: #cbd5e0;
+  --drop-zone-hover-bg: #f0f4ff;
+  --drop-zone-hover-border: #667eea;
+  --drop-text: #374151;
+  --file-types: #6b7280;
+  
+  --input-bg: #f9fafb;
+  --input-border: #e5e7eb;
+  --input-focus-bg: white;
+  --input-disabled-bg: #f3f4f6;
+  --input-text: #333;
+}
+
+body.dark-mode {
+  --drop-zone-bg: #1e1e2f;
+  --drop-zone-border: #33334d;
+  --drop-zone-hover-bg: #2a2a40;
+  --drop-zone-hover-border: #8c9eff;
+  --drop-text: #d0d0d0;
+  --file-types: #a0a0a0;
+  
+  --input-bg: #1e1e2f;
+  --input-border: #33334d;
+  --input-focus-bg: #2a2a40;
+  --input-disabled-bg: #2a2a30;
+  --input-text: #f0f0f0;
+}

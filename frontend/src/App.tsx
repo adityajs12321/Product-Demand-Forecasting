@@ -32,12 +32,22 @@ function App() {
   const [uploading, setUploading] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [product, setProduct] = useState("");
+  const [forecastModel, setForecastModel] = useState(1);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [chartData, setChartData] = useState<any>(null);
   const [showChart, setShowChart] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true);
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstance = useRef<ChartJS | null>(null);
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
+  }, [isDarkMode]);
   
   // Create chart when chartData changes
   useEffect(() => {
@@ -49,34 +59,55 @@ function App() {
       
       const ctx = chartRef.current.getContext('2d');
       if (ctx) {
+        const textColor = isDarkMode ? '#e0e0e0' : '#333';
+        const gridColor = isDarkMode ? '#444' : '#e9ecef';
+
         chartInstance.current = new ChartJS(ctx, {
           type: 'line',
           data: chartData,
           options: {
             responsive: true,
             maintainAspectRatio: false,
+            color: textColor,
             plugins: {
               legend: {
                 position: 'top' as const,
+                labels: {
+                  color: textColor
+                }
               },
               title: {
                 display: true,
                 text: `Demand Forecast for ${product}`,
+                color: textColor
               },
             },
             scales: {
               y: {
                 beginAtZero: true,
+                grid: {
+                  color: gridColor
+                },
+                ticks: {
+                  color: textColor
+                },
                 title: {
                   display: true,
-                  text: 'Demand (Units)'
+                  text: 'Demand (Units)',
+                  color: textColor
                 }
               },
               x: {
-                
+                grid: {
+                  color: gridColor
+                },
+                ticks: {
+                  color: textColor
+                },
                 title: {
                   display: true,
-                  text: 'Time Period'
+                  text: 'Time Period',
+                  color: textColor
                 }
               }
             }
@@ -91,7 +122,7 @@ function App() {
         chartInstance.current.destroy();
       }
     };
-  }, [chartData, product]);
+  }, [chartData, product, isDarkMode]);
   
   // function to handle file upload to the backend (fastapi with UploadFile class) and axios
   async function handleFileUpload(file: File) {
@@ -126,9 +157,10 @@ function App() {
     }
   }
 
-  const handleFileProcess = async (e: React.FormEvent) => {
+  const handleFileProcess = async (e: React.FormEvent, _product: string) => {
     e.preventDefault();
-    
+    setProduct(_product);
+    console.log('Processing product:', _product);
     if (!product.trim()) {
       setError('Please enter a product name.');
       return;
@@ -139,7 +171,7 @@ function App() {
     setSuccess(null);
 
     try {
-      const response = await api.post('/process', {product: product});
+      const response = await api.post('/process', {product: product, forecast_model: forecastModel});
       // console.log('Process successful:', response.data);
       setSuccess('Prediction completed successfully!');
       
@@ -159,7 +191,7 @@ function App() {
         labels: monthLabels,
         datasets: [
           {
-            label: 'Historical Demand',
+            label: 'Predicted Demand',
             data: sales,
             borderColor: 'rgb(75, 192, 192)',
             backgroundColor: 'rgba(75, 192, 192, 0.2)',
@@ -185,6 +217,7 @@ function App() {
     setUploading(false);
     setProcessing(false);
     setProduct("");
+    setForecastModel(1);
     setError(null);
     setSuccess(null);
     setChartData(null);
@@ -193,10 +226,15 @@ function App() {
 
   return (
     <div className="App">
-      <header className="app-header">
-        <h1>Product Demand Forecasting</h1>
-        <p>Upload your sales data and predict future product demand</p>
-      </header>
+      <div className="app-header">
+        <header>
+          <h1>Product Demand Forecasting</h1>
+          <p>Upload your sales data and predict future product demand</p>
+        </header>
+        <button id="mode-toggle" onClick={() => setIsDarkMode(!isDarkMode)}>
+          {isDarkMode ? 'Light Mode' : 'Dark Mode'}
+        </button>
+      </div>
       
       <main className="app-main">
         {error && <div className="message error-message">{error}</div>}
@@ -212,7 +250,7 @@ function App() {
           />
           {uploaded && file && (
             <div className="file-info">
-              ✅ Uploaded: <strong>{file.name}</strong>
+              Uploaded: <strong>{file.name}</strong>
             </div>
           )}
         </div>
@@ -220,10 +258,12 @@ function App() {
         {uploaded && (
           <div className="predict-section">
             <h2>Step 2: Enter Product Details</h2>
-            <p className="form-label">Product Name</p>
+            <p className="form-label">Product Name & Forecast Model</p>
             <InputField 
               product={product} 
               setProduct={setProduct} 
+              forecastModel={forecastModel}
+              setForecastModel={setForecastModel}
               handleFileProcess={handleFileProcess}
               processing={processing}
             />

@@ -6,13 +6,18 @@ import pandas as pd
 
 from pydantic import BaseModel
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from Model import model
-import tempfile
+from Model import model_v2 as model
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
 data, processed_data = None, None
+
+forecast_models = {
+    1: model.arima_forecast,
+    2: model.tbats_forecast,
+    3: model.tft_forecast
+}
 
 origins = [
     "http://localhost:3000"
@@ -26,8 +31,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+from enum import IntEnum
+
+class ForecastModel(IntEnum):
+    arima = 1
+    tbats = 2
+    tft = 3
+
 class ProductRequest(BaseModel):
     product: str
+    forecast_model: ForecastModel
 
 @app.get("/")
 def read_root():
@@ -45,7 +58,7 @@ def input_data(file: UploadFile = File(...)):
         # Pass the temporary file path to read_data
         global data
         data = model.read_data("tempfile.xlsx")
-        data = model.pre_process_data(data)  # Store processed data back to global variable
+        data, response = model.pre_process_data(data)  # Store processed data back to global variable
         return {"message": "Data processed successfully", "rows": len(data)}
     finally:
         print("Cleaning up temporary file...")
@@ -71,7 +84,7 @@ def filter_data(request: ProductRequest):
     # timerange = X["ds"]
     processed_data = X
 
-    timerange, sales = model.tbats_forecast(X, horizon=21)
+    timerange, sales = forecast_models[request.forecast_model](X, horizon=21)
 
     return {"sales": sales.tolist(), "timerange": timerange.astype(str).tolist()}
 
@@ -99,7 +112,6 @@ def tftpredict(request: ProductRequest):
     timerange, sales = model.tft_forecast(X, horizon=21)
 
     return {"sales": sales.tolist(), "timerange": timerange.astype(str).tolist()}
-
 
 
 # @app.post("/predict")

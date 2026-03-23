@@ -1,0 +1,35 @@
+
+:root {
+  --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --text-main: #333;
+  --header-bg: rgba(255, 255, 255, 0.95);
+  --header-title: #2c3e50;
+  --header-text: #666;
+  --toggle-btn-color: #666;
+  --toggle-btn-border: #ccc;
+  --section-bg: white;
+  --file-info-bg: #e8f5e8;
+  --file-info-border: #4caf50;
+  --file-info-text: #2e7d32;
+  --form-label: #374151;
+  --chart-bg: #f8f9fa;
+  --chart-border: #e9ecef;
+}
+
+body.dark-mode {
+  --bg-gradient: linear-gradient(135deg, #1e1e2f 0%, #2a2a40 100%);
+  --text-main: #f0f0f0;
+  --header-bg: rgba(30, 30, 46, 0.95);
+  --header-title: #e0e0e0;
+  --header-text: #a0a0a0;
+  --toggle-btn-color: #e0e0e0;
+  --toggle-btn-border: #555;
+  --section-bg: #2a2a40;
+  --file-info-bg: #1e3a24;
+  --file-info-border: #4caf50;
+  --file-info-text: #81c784;
+  --form-label: #d0d0d0;
+  --chart-bg: #1e1e2f;
+  --chart-border: #33334d;
+}
+
