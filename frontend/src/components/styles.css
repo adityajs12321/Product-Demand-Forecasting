@@ -1,31 +1,31 @@
 :root {
-  --drop-zone-bg: #f8fafc;
-  --drop-zone-border: #cbd5e0;
-  --drop-zone-hover-bg: #f0f4ff;
-  --drop-zone-hover-border: #667eea;
-  --drop-text: #374151;
-  --file-types: #6b7280;
+    --drop-zone-bg: rgba(255, 255, 255, 0.74);
+    --drop-zone-border: rgba(14, 31, 42, 0.18);
+    --drop-zone-hover-bg: rgba(11, 143, 131, 0.08);
+    --drop-zone-hover-border: #0b8f83;
+    --drop-text: #18313d;
+    --file-types: #56707d;
   
-  --input-bg: #f9fafb;
-  --input-border: #e5e7eb;
+    --input-bg: rgba(255, 255, 255, 0.8);
+    --input-border: rgba(14, 31, 42, 0.16);
   --input-focus-bg: white;
-  --input-disabled-bg: #f3f4f6;
-  --input-text: #333;
+    --input-disabled-bg: #edf2f4;
+    --input-text: #11232c;
 }
 
 body.dark-mode {
-  --drop-zone-bg: #1e1e2f;
-  --drop-zone-border: #33334d;
-  --drop-zone-hover-bg: #2a2a40;
-  --drop-zone-hover-border: #8c9eff;
-  --drop-text: #d0d0d0;
-  --file-types: #a0a0a0;
+    --drop-zone-bg: rgba(16, 28, 35, 0.62);
+    --drop-zone-border: rgba(121, 161, 175, 0.26);
+    --drop-zone-hover-bg: rgba(83, 192, 177, 0.12);
+    --drop-zone-hover-border: #53c0b1;
+    --drop-text: #d0e6ee;
+    --file-types: #9ab6c1;
   
-  --input-bg: #1e1e2f;
-  --input-border: #33334d;
-  --input-focus-bg: #2a2a40;
-  --input-disabled-bg: #2a2a30;
-  --input-text: #f0f0f0;
+    --input-bg: rgba(21, 39, 48, 0.78);
+    --input-border: rgba(121, 161, 175, 0.32);
+    --input-focus-bg: rgba(21, 39, 48, 0.94);
+    --input-disabled-bg: rgba(19, 34, 41, 0.8);
+    --input-text: #ebf7fb;
 }
 
 /* File Upload Styles */
@@ -35,12 +35,12 @@ body.dark-mode {
 
 .drop-zone {
     border: 2px dashed var(--drop-zone-border);
-    border-radius: 12px;
+    border-radius: 16px;
     padding: 3rem 2rem;
     text-align: center;
     background: var(--drop-zone-bg);
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: transform 0.26s ease, border-color 0.26s ease, background 0.26s ease, box-shadow 0.26s ease;
     position: relative;
     overflow: hidden;
 }
@@ -49,6 +49,7 @@ body.dark-mode {
     border-color: var(--drop-zone-hover-border);
     background: var(--drop-zone-hover-bg);
     transform: translateY(-2px);
+    box-shadow: 0 16px 30px rgba(12, 45, 52, 0.14);
 }
 
 .drop-zone.uploading {
@@ -63,14 +64,15 @@ body.dark-mode {
 }
 
 .upload-icon {
-    font-size: 3rem;
+    font-size: 2.6rem;
     margin-bottom: 1rem;
 }
 
 .drop-text {
-    font-size: 1.1rem;
+    font-size: 1.04rem;
     margin-bottom: 0.5rem;
     color: var(--drop-text);
+    font-family: 'DM Sans', 'Segoe UI', sans-serif;
 }
 
 .file-types {
@@ -80,10 +82,10 @@ body.dark-mode {
 }
 
 .spinner {
-    width: 40px;
-    height: 40px;
-    border: 4px solid #e5e7eb;
-    border-top: 4px solid #667eea;
+    width: 34px;
+    height: 34px;
+    border: 3px solid rgba(114, 139, 147, 0.26);
+    border-top: 3px solid #0b8f83;
     border-radius: 50%;
     animation: spin 1s linear infinite;
     margin: 0 auto 1rem;
@@ -100,25 +102,26 @@ body.dark-mode {
 }
 
 .form-group {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.1rem;
 }
 
 .input-field {
     width: 100%;
-    padding: 1rem;
-    font-size: 1rem;
+    padding: 0.86rem 0.95rem;
+    font-size: 0.98rem;
     color: var(--input-text);
     background-color: var(--input-bg);
-    border: 2px solid var(--input-border);
-    border-radius: 8px;
+    border: 1px solid var(--input-border);
+    border-radius: 12px;
     transition: all 0.2s ease;
     outline: none;
+    font-family: 'DM Sans', 'Segoe UI', sans-serif;
 }
 
 .input-field:focus {
-    border-color: #667eea;
+    border-color: #0b8f83;
     background-color: var(--input-focus-bg);
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    box-shadow: 0 0 0 4px rgba(11, 143, 131, 0.16);
 }
 
 .input-field:disabled {
@@ -129,25 +132,27 @@ body.dark-mode {
 
 .predict-button {
     width: 100%;
-    padding: 1rem;
-    font-size: 1.1rem;
+    padding: 0.92rem;
+    font-size: 1rem;
     font-weight: 600;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(120deg, #0b8f83 0%, #2fbaa8 100%);
     color: white;
-    border: none;
-    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: transform 0.24s ease, box-shadow 0.24s ease, filter 0.24s ease;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    min-height: 54px;
+    min-height: 52px;
+    font-family: 'Space Grotesk', 'Avenir Next', 'Segoe UI', sans-serif;
 }
 
 .predict-button:hover:not(:disabled) {
-    transform: translateY(-1px);
-    box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 14px 26px rgba(11, 143, 131, 0.32);
+    filter: saturate(1.1);
 }
 
 .predict-button:disabled {
@@ -158,7 +163,7 @@ body.dark-mode {
 }
 
 .predict-button.processing {
-    background: #6b7280;
+    background: #4c6f77;
 }
 
 .button-spinner {

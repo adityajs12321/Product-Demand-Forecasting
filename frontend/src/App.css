@@ -1,35 +1,51 @@
 :root {
-  --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --text-main: #333;
-  --header-bg: rgba(255, 255, 255, 0.95);
-  --header-title: #2c3e50;
-  --header-text: #666;
-  --toggle-btn-color: #666;
-  --toggle-btn-border: #ccc;
-  --section-bg: white;
-  --file-info-bg: #e8f5e8;
-  --file-info-border: #4caf50;
-  --file-info-text: #2e7d32;
-  --form-label: #374151;
-  --chart-bg: #f8f9fa;
-  --chart-border: #e9ecef;
+  --surface: rgba(255, 255, 255, 0.84);
+  --surface-strong: #ffffff;
+  --surface-border: rgba(255, 255, 255, 0.45);
+  --text-main: #122027;
+  --text-soft: #4b626f;
+  --title: #0e1f2a;
+  --accent: #0b8f83;
+  --accent-strong: #0a756d;
+  --warm: #e58b53;
+  --ok-bg: #e9fbf7;
+  --ok-border: #63cdb8;
+  --ok-text: #0e6b5f;
+  --danger-bg: #ffefec;
+  --danger-border: #ef8b7f;
+  --danger-text: #8a2b24;
+  --chart-bg: rgba(255, 255, 255, 0.78);
+  --chart-border: rgba(18, 32, 39, 0.12);
+  --shadow: 0 20px 45px rgba(7, 27, 36, 0.12);
+  --shadow-hover: 0 28px 55px rgba(7, 27, 36, 0.16);
+  --bg-a: #cbeee8;
+  --bg-b: #fef4e7;
+  --bg-c: #f5fbfd;
 }
 
 body.dark-mode {
-  --bg-gradient: linear-gradient(135deg, #1e1e2f 0%, #2a2a40 100%);
-  --text-main: #f0f0f0;
-  --header-bg: rgba(30, 30, 46, 0.95);
-  --header-title: #e0e0e0;
-  --header-text: #a0a0a0;
-  --toggle-btn-color: #e0e0e0;
-  --toggle-btn-border: #555;
-  --section-bg: #2a2a40;
-  --file-info-bg: #1e3a24;
-  --file-info-border: #4caf50;
-  --file-info-text: #81c784;
-  --form-label: #d0d0d0;
-  --chart-bg: #1e1e2f;
-  --chart-border: #33334d;
+  --surface: rgba(16, 28, 35, 0.86);
+  --surface-strong: #152730;
+  --surface-border: rgba(121, 161, 175, 0.24);
+  --text-main: #deedf2;
+  --text-soft: #9db7c2;
+  --title: #f2fbff;
+  --accent: #53c0b1;
+  --accent-strong: #32a394;
+  --warm: #f3ad7e;
+  --ok-bg: #113834;
+  --ok-border: #43a996;
+  --ok-text: #92e4d2;
+  --danger-bg: #3a1f1c;
+  --danger-border: #aa5d54;
+  --danger-text: #ffb7ac;
+  --chart-bg: rgba(20, 36, 44, 0.78);
+  --chart-border: rgba(135, 168, 181, 0.24);
+  --shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+  --shadow-hover: 0 28px 55px rgba(0, 0, 0, 0.4);
+  --bg-a: #0f2430;
+  --bg-b: #22323f;
+  --bg-c: #0c1d28;
 }
 
 * {
@@ -40,164 +56,226 @@ body.dark-mode {
 
 .App {
   min-height: 100vh;
-  background: var(--bg-gradient);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(11, 143, 131, 0.24), transparent 30%),
+    radial-gradient(circle at 82% 15%, rgba(229, 139, 83, 0.24), transparent 35%),
+    linear-gradient(150deg, var(--bg-a), var(--bg-b) 44%, var(--bg-c));
+  font-family: 'Space Grotesk', 'Avenir Next', 'Segoe UI', sans-serif;
   color: var(--text-main);
+  position: relative;
+  overflow: hidden;
+}
+
+.App::before,
+.App::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  border-radius: 999px;
+  filter: blur(2px);
+}
+
+.App::before {
+  width: 380px;
+  height: 380px;
+  left: -120px;
+  top: 22%;
+  background: rgba(11, 143, 131, 0.12);
+}
+
+.App::after {
+  width: 420px;
+  height: 420px;
+  right: -140px;
+  top: 8%;
+  background: rgba(229, 139, 83, 0.12);
 }
 
 .app-header {
-  text-align: center;
-  padding: 2rem 1rem;
-  background: var(--header-bg);
-  backdrop-filter: blur(10px);
+  width: min(1100px, calc(100% - 2rem));
+  margin: 1.25rem auto 0;
+  padding: 1.5rem 1.4rem;
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   display: flex;
-  /* flex-direction: row; */
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin: 0;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  border-radius: 22px;
+  box-shadow: var(--shadow);
   position: relative;
+  z-index: 2;
 }
-/* 
-.app-header::before {
-  content: "";
-  flex: 1;
-} */
 
-/* 2. Your centered title/element */
-/* .app-header header { 
-  flex: 3;
-  text-align: center;
-} */
+.header-copy {
+  max-width: 760px;
+}
 
-#mode-toggle {
+.hero-kicker {
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.mode-toggle {
   cursor: pointer;
-  font-size: 0.9rem;
-  color: var(--toggle-btn-color);
-  background: transparent;
-  position: absolute;
-  right: 1rem;
-  padding: 0.5rem 1rem;
-  border: 1px solid var(--toggle-btn-border);
-  border-radius: 8px;
-  transition: all 0.2s ease;
-  /* flex: 1; */
-  display: flex;
-  /* white-space: nowrap; */
-  /* margin-right: 0; */
+  font-size: 0.86rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--text-main);
+  background: color-mix(in oklab, var(--surface-strong) 80%, transparent);
+  padding: 0.62rem 1rem;
+  border: 1px solid color-mix(in oklab, var(--accent) 34%, transparent);
+  border-radius: 999px;
+  transition: transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease;
+}
+
+.mode-toggle:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(11, 143, 131, 0.18);
 }
 
 .app-header h1 {
-  font-size: 2.5rem;
-  margin-bottom: 0.5rem;
-  color: var(--header-title);
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin-bottom: 0.4rem;
+  color: var(--title);
   font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
 }
 
-.app-header p {
-  font-size: 1.1rem;
-  color: var(--header-text);
-  max-width: 600px;
-  margin: 0 auto;
+.hero-subtext {
+  font-size: clamp(1rem, 2vw, 1.12rem);
+  color: var(--text-soft);
+  max-width: 640px;
+  margin: 0;
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
 }
 
 .app-main {
-  max-width: 1500px;
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: 1.2rem 1rem 2.2rem;
+  position: relative;
+  z-index: 2;
 }
 
 .upload-section,
 .predict-section,
 .chart-section {
-  background: var(--section-bg);
-  border-radius: 12px;
-  padding: 2rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background: var(--surface);
+  border-radius: 20px;
+  border: 1px solid var(--surface-border);
+  padding: clamp(1.2rem, 2.4vw, 2rem);
+  margin-bottom: 1.15rem;
+  box-shadow: var(--shadow);
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+  animation: rise-in 0.55s ease both;
+}
+
+.predict-section {
+  animation-delay: 0.08s;
+}
+
+.chart-section {
+  animation-delay: 0.16s;
 }
 
 .upload-section:hover,
 .predict-section:hover,
 .chart-section:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-hover);
 }
 
 .upload-section h2,
 .predict-section h2,
 .chart-section h2 {
-  font-size: 1.3rem;
+  font-size: clamp(1.05rem, 2.3vw, 1.45rem);
   margin-bottom: 1rem;
-  color: var(--header-title);
+  color: var(--title);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.45rem;
+  letter-spacing: -0.01em;
 }
 
 .file-info {
-  margin-top: 1rem;
-  padding: 1rem;
-  background: var(--file-info-bg);
-  border: 1px solid var(--file-info-border);
-  border-radius: 8px;
-  color: var(--file-info-text);
+  margin-top: 0.95rem;
+  padding: 0.8rem 0.95rem;
+  background: color-mix(in oklab, var(--ok-bg) 80%, transparent);
+  border: 1px solid var(--ok-border);
+  border-radius: 10px;
+  color: var(--ok-text);
   font-size: 0.9rem;
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
 }
 
 .message {
-  padding: 1rem;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-  font-weight: 500;
+  padding: 0.9rem 1rem;
+  border-radius: 12px;
+  margin-bottom: 0.8rem;
+  font-weight: 600;
+  border-width: 1px;
+  border-style: solid;
+  animation: rise-in 0.35s ease both;
 }
 
 .form-label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-    color: var(--form-label);
-    font-size: 0.95rem;
+  display: block;
+  margin-bottom: 0.65rem;
+  font-weight: 600;
+  color: var(--text-soft);
+  font-size: 0.92rem;
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
 }
 
 .error-message {
-  background: #ffebee;
-  border: 1px solid #f44336;
-  color: #c62828;
+  background: var(--danger-bg);
+  border-color: var(--danger-border);
+  color: var(--danger-text);
 }
 
 .success-message {
-  background: #e8f5e8;
-  border: 1px solid #4caf50;
-  color: #2e7d32;
+  background: var(--ok-bg);
+  border-color: var(--ok-border);
+  color: var(--ok-text);
 }
 
 .reset-button {
-  background: #6c757d;
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-size: 1rem;
+  background: linear-gradient(120deg, var(--warm), color-mix(in oklab, var(--warm), #c96728 34%));
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  padding: 0.82rem 1.4rem;
+  border-radius: 999px;
+  font-size: 0.96rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: transform 0.24s ease, box-shadow 0.24s ease;
   display: block;
-  margin: 2rem auto 0;
+  margin: 1.4rem auto 0;
+  box-shadow: 0 14px 28px rgba(172, 98, 52, 0.3);
 }
 
 .reset-button:hover {
-  background: #5a6268;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 18px 34px rgba(172, 98, 52, 0.36);
 }
 
 .chart-container {
   width: 100%;
   height: 400px;
-  margin-top: 1rem;
-  padding: 1rem;
+  margin-top: 0.95rem;
+  padding: 0.9rem;
   background: var(--chart-bg);
-  border-radius: 8px;
+  border-radius: 14px;
   border: 1px solid var(--chart-border);
 }
 
@@ -206,26 +284,44 @@ body.dark-mode {
 }
 
 @media (max-width: 768px) {
-  .app-header h1 {
-    font-size: 2rem;
+  .app-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.8rem;
+    padding: 1.2rem;
+  }
+
+  .mode-toggle {
+    width: fit-content;
   }
   
   .app-main {
-    padding: 1rem;
+    padding: 0.9rem 0.8rem 1.8rem;
   }
-  
+
   .upload-section,
   .predict-section,
   .chart-section {
-    padding: 1.5rem;
+    border-radius: 16px;
   }
-  
+
   .chart-container {
-    height: 300px;
-    padding: 0.75rem;
+    height: 290px;
+    padding: 0.7rem;
   }
-  
+
   .chart-container canvas {
     max-height: 250px !important;
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

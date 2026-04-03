@@ -171,7 +171,7 @@ function App() {
     setSuccess(null);
 
     try {
-      const response = await api.post('/process', {product: product, forecast_model: forecastModel});
+      const response = await api.post('/process', {product: _product, forecast_model: forecastModel});
       // console.log('Process successful:', response.data);
       setSuccess('Prediction completed successfully!');
       
@@ -227,11 +227,12 @@ function App() {
   return (
     <div className="App">
       <div className="app-header">
-        <header>
+        <header className="header-copy">
+          <p className="hero-kicker">Intelligent Planning Suite</p>
           <h1>Product Demand Forecasting</h1>
-          <p>Upload your sales data and predict future product demand</p>
+          <p className="hero-subtext">Upload retail data, choose a model, and visualize future demand in seconds.</p>
         </header>
-        <button id="mode-toggle" onClick={() => setIsDarkMode(!isDarkMode)}>
+        <button className="mode-toggle" onClick={() => setIsDarkMode(!isDarkMode)}>
           {isDarkMode ? 'Light Mode' : 'Dark Mode'}
         </button>
       </div>
@@ -281,7 +282,7 @@ function App() {
         
         {uploaded && (
           <button className="reset-button" onClick={resetApp}>
-            🔄 Start Over
+            Start New Forecast
           </button>
         )}
       </main>
