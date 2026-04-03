@@ -113,4 +113,4 @@ Response example:
 
 ## License
 
-Add your preferred license information here.
+MIT Licence
