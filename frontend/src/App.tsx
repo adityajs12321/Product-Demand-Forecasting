@@ -161,7 +161,7 @@ function App() {
     e.preventDefault();
     setProduct(_product);
     console.log('Processing product:', _product);
-    if (!product.trim()) {
+    if (!_product.trim()) {
       setError('Please enter a product name.');
       return;
     }
