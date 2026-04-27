@@ -19,9 +19,10 @@ forecast_models = {
     3: model.tft_forecast
 }
 
-origins = [
-    "http://localhost:3000"
-]
+# Comma-separated list of allowed frontend origins.
+# Example: "http://localhost:3000,https://your-frontend.vercel.app"
+frontend_origins = os.getenv("FRONTEND_ORIGINS", "http://localhost:3000")
+origins = [origin.strip() for origin in frontend_origins.split(",") if origin.strip()]
 
 app.add_middleware(
     CORSMiddleware,

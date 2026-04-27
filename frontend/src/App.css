@@ -60,7 +60,7 @@ body.dark-mode {
     radial-gradient(circle at 15% 20%, rgba(11, 143, 131, 0.24), transparent 30%),
     radial-gradient(circle at 82% 15%, rgba(229, 139, 83, 0.24), transparent 35%),
     linear-gradient(150deg, var(--bg-a), var(--bg-b) 44%, var(--bg-c));
-  font-family: 'Space Grotesk', 'Avenir Next', 'Segoe UI', sans-serif;
+  font-family: 'Avenir Next', 'Segoe UI', sans-serif;
   color: var(--text-main);
   position: relative;
   overflow: hidden;
@@ -155,7 +155,7 @@ body.dark-mode {
   color: var(--text-soft);
   max-width: 640px;
   margin: 0;
-  font-family: 'DM Sans', 'Segoe UI', sans-serif;
+  font-family: 'Avenir Next', 'Segoe UI', sans-serif;
 }
 
 .app-main {

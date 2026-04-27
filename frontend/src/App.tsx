@@ -228,9 +228,8 @@ function App() {
     <div className="App">
       <div className="app-header">
         <header className="header-copy">
-          <p className="hero-kicker">Intelligent Planning Suite</p>
           <h1>Product Demand Forecasting</h1>
-          <p className="hero-subtext">Upload retail data, choose a model, and visualize future demand in seconds.</p>
+          <p className="hero-subtext">Upload retail data, choose a model, and visualize future demand.</p>
         </header>
         <button className="mode-toggle" onClick={() => setIsDarkMode(!isDarkMode)}>
           {isDarkMode ? 'Light Mode' : 'Dark Mode'}
