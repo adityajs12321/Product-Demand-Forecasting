@@ -3,6 +3,7 @@ import './App.css';
 import InputFile from './components/InputFile';
 import api from './api';
 import InputField from './components/InputField';
+import { Analytics } from '@vercel/analytics/react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -225,67 +226,70 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <div className="app-header">
-        <header className="header-copy">
-          <h1>Product Demand Forecasting</h1>
-          <p className="hero-subtext">Upload retail data, choose a model, and visualize future demand.</p>
-        </header>
-        <button className="mode-toggle" onClick={() => setIsDarkMode(!isDarkMode)}>
-          {isDarkMode ? 'Light Mode' : 'Dark Mode'}
-        </button>
-      </div>
-      
-      <main className="app-main">
-        {error && <div className="message error-message">{error}</div>}
-        {success && <div className="message success-message">{success}</div>}
-        
-        <div className="upload-section">
-          <h2>Step 1: Upload Sales Data</h2>
-          <InputFile 
-            file={file} 
-            setFile={setFile} 
-            handleFileUpload={handleFileUpload}
-            uploading={uploading}
-          />
-          {uploaded && file && (
-            <div className="file-info">
-              Uploaded: <strong>{file.name}</strong>
-            </div>
-          )}
+    <>
+      <div className="App">
+        <div className="app-header">
+          <header className="header-copy">
+            <h1>Product Demand Forecasting</h1>
+            <p className="hero-subtext">Upload retail data, choose a model, and visualize future demand.</p>
+          </header>
+          <button className="mode-toggle" onClick={() => setIsDarkMode(!isDarkMode)}>
+            {isDarkMode ? 'Light Mode' : 'Dark Mode'}
+          </button>
         </div>
         
-        {uploaded && (
-          <div className="predict-section">
-            <h2>Step 2: Enter Product Details</h2>
-            <p className="form-label">Product Name & Forecast Model</p>
-            <InputField 
-              product={product} 
-              setProduct={setProduct} 
-              forecastModel={forecastModel}
-              setForecastModel={setForecastModel}
-              handleFileProcess={handleFileProcess}
-              processing={processing}
+        <main className="app-main">
+          {error && <div className="message error-message">{error}</div>}
+          {success && <div className="message success-message">{success}</div>}
+          
+          <div className="upload-section">
+            <h2>Step 1: Upload Sales Data</h2>
+            <InputFile 
+              file={file} 
+              setFile={setFile} 
+              handleFileUpload={handleFileUpload}
+              uploading={uploading}
             />
+            {uploaded && file && (
+              <div className="file-info">
+                Uploaded: <strong>{file.name}</strong>
+              </div>
+            )}
           </div>
-        )}
-        
-        {showChart && chartData && (
-          <div className="chart-section">
-            <h2>Step 3: Demand Forecast Results</h2>
-            <div className="chart-container">
-              <canvas ref={chartRef}></canvas>
+          
+          {uploaded && (
+            <div className="predict-section">
+              <h2>Step 2: Enter Product Details</h2>
+              <p className="form-label">Product Name & Forecast Model</p>
+              <InputField 
+                product={product} 
+                setProduct={setProduct} 
+                forecastModel={forecastModel}
+                setForecastModel={setForecastModel}
+                handleFileProcess={handleFileProcess}
+                processing={processing}
+              />
             </div>
-          </div>
-        )}
-        
-        {uploaded && (
-          <button className="reset-button" onClick={resetApp}>
-            Start New Forecast
-          </button>
-        )}
-      </main>
-    </div>
+          )}
+          
+          {showChart && chartData && (
+            <div className="chart-section">
+              <h2>Step 3: Demand Forecast Results</h2>
+              <div className="chart-container">
+                <canvas ref={chartRef}></canvas>
+              </div>
+            </div>
+          )}
+          
+          {uploaded && (
+            <button className="reset-button" onClick={resetApp}>
+              Start New Forecast
+            </button>
+          )}
+        </main>
+      </div>
+      <Analytics />
+    </>
   );
 }
 
