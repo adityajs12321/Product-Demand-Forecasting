@@ -1,4 +1,6 @@
-import ollama
+import os
+from groq import Groq
+import json
 from pydantic import BaseModel
 import lightning.pytorch as pl
 from pytorch_forecasting import Baseline, TemporalFusionTransformer, TimeSeriesDataSet
@@ -29,13 +31,18 @@ def read_data(fileName: str) -> pd.DataFrame:
 def pre_process_data(data: pd.DataFrame) -> pd.DataFrame | Response:
     # Handle missing values
     SYSTEM_PROMPT = "You are a helpful assistant that reads columns of a dataframe and returns the column that corresponds to unique_id, ds and y. The column names may not be exactly unique_id, ds and y but they will be similar. For example, unique_id may be called Description, ds may be called date or time-index and y may be called Quantity, number of items sold. You must also return a list of columns that must be dropped from the dataframe because they were not relevant for forecasting. Ex: Invoice, UserID, Region. DO NOT DROP COLUMNS THAT CAN BE USED AS EXOGENOUS FEATURES, Ex: Price, Calendar Events, etc."
-    response = ollama.chat(
-        model="gemma3:4b",
-        messages=[{"role": "system", "content": SYSTEM_PROMPT}, {"role": "user", "content": f"Here are the columns of the dataframe: {data.columns.to_list()}"}],
-        format=Response.model_json_schema(),
-        think=False
-    ).message
-    response = Response.model_validate_json(response.content)
+    client = Groq()
+    schema_str = json.dumps(Response.model_json_schema())
+    completion = client.chat.completions.create(
+        model="llama-3.1-8b-instant",
+        messages=[
+            {"role": "system", "content": SYSTEM_PROMPT + f"\n\nPlease ensure your response is a valid JSON object matching this schema:\n{schema_str}"}, 
+            {"role": "user", "content": f"Here are the columns of the dataframe: {data.columns.to_list()}"}
+        ],
+        response_format={"type": "json_object"}
+    )
+    response_content = completion.choices[0].message.content
+    response = Response.model_validate_json(response_content)
     data = data[data[response.y] > 0]
     data[response.unique_id] = data[response.unique_id].apply(lambda x: str(x))
     data[response.unique_id] = data[response.unique_id].apply(lambda x: x.strip() if isinstance(x, str) else x)
