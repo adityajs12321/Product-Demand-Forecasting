@@ -7,3 +7,5 @@
 /backend/tempfile.xlsx
 /online_retail_III.xlsx
 /backend/lightning_logs
+/backend/node_modules
+/backend/uploads

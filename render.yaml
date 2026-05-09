@@ -1,15 +1,19 @@
 services:
   - type: web
     name: product-demand-forecasting-api
-    env: python
+    env: node
     rootDir: backend
     plan: free
-    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
-    startCommand: python main.py
+    buildCommand: npm install && pip install -r scripts/requirements.txt
+    startCommand: node server.js
     envVars:
       - key: PORT
         value: 10000
+      - key: NODE_VERSION
+        value: 20.11.0
       - key: PYTHON_VERSION
         value: 3.11.9
       - key: FRONTEND_ORIGINS
+        sync: false
+      - key: GROQ_API_KEY
         sync: false
